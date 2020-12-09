@@ -1,0 +1,9 @@
+.heading {
+  width: 100%;
+  text-align: center; }
+  .heading_1 {
+    margin: 15px 0; }
+    @media screen and (min-width: 767px) {
+      .heading_1 {
+        font-size: 32px;
+        margin: 30px 0; } }
