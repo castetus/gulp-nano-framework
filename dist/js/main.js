@@ -32,26 +32,39 @@
 // })
 
 
-
-const scroller = document.querySelector('#scroller')
-window.addEventListener('scroll', function(){
-    let scrollSize = window.pageYOffset
-    if (scrollSize > 100){
-        scroller.classList.add('scroller_visible')
-    } else {
-        scroller.classList.remove('scroller_visible')
-    }
-})
-scroller.addEventListener('click', function(){
-    const step = window.pageYOffset / 20,
-            animationTime = 400,
-            framesCount = 20;
-        let scroll = setInterval(() => {
-        window.scrollBy(0, -step)
-            if (window.pageYOffset < 1){
-                clearInterval(scroll)
-            }
-        }, animationTime / framesCount);
-})
+// document.addEventListener('DOMContentLoaded', () => {
+//   const url = window.location.href
+//   const links = document.querySelectorAll('.menu__link')
+//   for (let link of links){
+//     if (link.href === url){
+//       link.classList.toggle('menu__link_active')
+//     }
+//   }
+//   const menuButton = document.querySelector('#menu-button')
+//   const menu = document.querySelector('#menu')
+//   menuButton.addEventListener('click', () => {
+//     menu.classList.toggle('menu_visible')
+//   })
+// })
+// const scroller = document.querySelector('#scroller')
+// window.addEventListener('scroll', function(){
+//     let scrollSize = window.pageYOffset
+//     if (scrollSize > 100){
+//         scroller.classList.add('scroller_visible')
+//     } else {
+//         scroller.classList.remove('scroller_visible')
+//     }
+// })
+// scroller.addEventListener('click', function(){
+//     const step = window.pageYOffset / 20,
+//             animationTime = 400,
+//             framesCount = 20;
+//         let scroll = setInterval(() => {
+//         window.scrollBy(0, -step)
+//             if (window.pageYOffset < 1){
+//                 clearInterval(scroll)
+//             }
+//         }, animationTime / framesCount);
+// })
 
 

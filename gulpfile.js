@@ -1,25 +1,18 @@
 'use strict';
 
 const gulp = require('gulp'),
+    // sassVariables = require('gulp-sass-variables'),
     sass = require('gulp-sass'),
     concat = require('gulp-concat'),
     plumber = require('gulp-plumber'),
-    image = require('gulp-imagemin'),
     browserSync = require('browser-sync'),
-    font64 = require('gulp-cssfont64'),
     clean = require('gulp-clean'),
-    pug = require('gulp-pug'),
-    minify = require('gulp-minify'),
-    cssnano = require('gulp-cssnano');
+    pug = require('gulp-pug');
+
 // common
 function cleanTask(){
     return gulp.src(['dist/style.css', 'src/css/**/*.css'])
         .pipe(clean())
-}
-function concats(){
-    return gulp.src(['src/css/**/*.css', 'src/addcss/*.css'])
-    .pipe(concat('style.css'))
-    .pipe(gulp.dest('dist'))
 }
 function html(){
     return gulp.src('src/pages/**/*.pug')
@@ -30,8 +23,8 @@ function css(){
     return gulp.src('src/**/*.scss')
         .pipe(plumber())
         .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('src/css'))
-        .pipe(browserSync.reload({stream: true}))
+        .pipe(concat('style.css'))
+        .pipe(gulp.dest('dist'))
 }
 function jsConcat(){
     return gulp.src('src/**/*.js')
@@ -39,10 +32,8 @@ function jsConcat(){
         .pipe(gulp.dest('dist/js'))
 }
 function font(){
-    return gulp.src('src/fonts/*.*')
-        .pipe(font64())
-        .pipe(concat('fonts.css'))
-        .pipe(gulp.dest('dist'));
+    return gulp.src('src/assets/fonts/*.*')
+        .pipe(gulp.dest('dist/assets/fonts'));
 }
 function browserSyncf(){
     browserSync.init(['./dist/**/**.**'],{
@@ -54,14 +45,18 @@ function browserSyncf(){
     });
 }
 function img(){
-    return gulp.src('src/img/**/*')
-        .pipe(image())
-        .pipe(gulp.dest('dist/img'));
+    return gulp.src('src/assets/img/**/*')
+        .pipe(gulp.dest('dist/assets/img'));
+}
+function icons(){
+  return gulp.src('src/assets/icons/**/*')
+      .pipe(gulp.dest('dist/assets/icons'));
 }
 function watchTask(){
-    gulp.watch('src/**/*.scss', gulp.series(css, concats));
+    gulp.watch('src/**/*.scss', {usePolling: true}, gulp.series(css));
     gulp.watch('src/**/*.pug', gulp.series(html));
     gulp.watch('src/**/*.js', gulp.series(jsConcat));
+    gulp.watch('src/assets/**/*.*')
 }
 // production
 function cssMin(){
@@ -79,13 +74,14 @@ exports.minifyJs = minifyJs;
 exports.cssMin = cssMin;
 exports.js = jsConcat;
 exports.img = img;
+exports.icons = icons;
 exports.cleanTask = cleanTask;
-exports.font = font;
 exports.html = html;
 exports.css = css;
-exports.concats = concats;
+exports.font = font
+// exports.concats = concats;
 exports.sync = browserSyncf;
 exports.watch = watchTask;
 
-exports.dev = gulp.parallel(gulp.series(html, css, concats, jsConcat, browserSyncf), watchTask);
-exports.prod = gulp.parallel(html, gulp.series(cleanTask, css, concats, cssMin), gulp.series(jsConcat, minifyJs), img, font);
+exports.dev = gulp.parallel(gulp.series(html, css, jsConcat, img, icons, font, browserSyncf), watchTask);
+exports.prod = gulp.parallel(html, gulp.series(cleanTask, css, cssMin), gulp.series(jsConcat, minifyJs), img, font);
